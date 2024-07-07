@@ -1,12 +1,9 @@
-import background from '/background.png';
+// import background from '/background.png';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
   return (
-    <div
-      className='bg-img bg-contain  h-screen flex justify-center items-center'
-      style={{ 'background-image': `url(${background})` }}
-    >
+    <div className='bg-gradient-to-b from-blue-100 via-transparent to-blue-500 h-screen flex justify-center items-center'>
       <div className='flex flex-col items-center justify-center p-8 gap-2 bg-transparent w-1/2'>
         <h1 className='text-3xl font-bold underline text-blue-600'>Register</h1>
         <form
@@ -35,7 +32,7 @@ const Register = () => {
             required
           />
           <button
-            className='bg-blue-300 p-2 h-9 text-center w-1/3 border rounded-md cursor-pointer hover:bg-white hover:text-blue-500 hover:border hover:border-blue-500'
+            className='bg-blue-300 p-2 text-center w-1/3 border rounded-md cursor-pointer hover:bg-white hover:text-blue-500 hover:border hover:border-blue-500'
             type='submit'
           >
             Register
