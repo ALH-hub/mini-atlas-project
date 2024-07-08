@@ -1,11 +1,29 @@
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import TeacherHome from './pages/teacher/TeacherHome.jsx';
 import StudentHome from './pages/student/StudentHome.jsx';
 import AdminHome from './pages/admin/AdminHome.jsx';
+import SNavbar from './components/student/SNavbar.jsx';
+
+const SLayout = () => {
+  return (
+    <>
+      <SNavbar />
+      <Outlet />
+    </>
+  );
+};
 
 const BrowserRouter = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/',
+    element: <Login />,
+  },
   {
     path: '/admin',
     element: <AdminHome />,
@@ -16,11 +34,13 @@ const BrowserRouter = createBrowserRouter([
   },
   {
     path: '/student',
-    element: <StudentHome />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
+    element: <SLayout />,
+    children: [
+      {
+        path: '/student',
+        element: <StudentHome />,
+      },
+    ],
   },
   {
     path: '/register',
