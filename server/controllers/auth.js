@@ -9,60 +9,200 @@ const sct = process.env.SECRETE;
 
 // student
 export const sRegister = async (req, res) => {
-  const user = req.body;
-  if (!user || !user.name || !user.email || !user.password)
+  try {
+    const user = req.body;
+    if (!user || !user.name || !user.email || !user.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing Registration information' });
+
+    const verif = await dbClient.findStudent({ email: user.email });
+    if (verif)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'user already exist' });
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(user.password, salt);
+
+    const newUser = {
+      name: user.name,
+      email: user.email,
+      password: hash,
+    };
+    await dbClient.insertStudent(newUser);
     return res
-      .status(400)
-      .json({ status: 400, message: 'Missing Registration information' });
-
-  const verif = await dbClient.findStudent({ email: user.email });
-  if (verif)
-    return res.status(400).json({ status: 400, message: 'user already exist' });
-
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(user.password, salt);
-
-  const newUser = {
-    name: user.name,
-    email: user.email,
-    password: hash,
-  };
-  await dbClient.insertStudent(newUser);
-  return res
-    .status(200)
-    .json({ status: 200, message: 'user added successfully' });
+      .status(200)
+      .json({ status: 200, message: 'user added successfully' });
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'server error' });
+  }
 };
 
 export const sLogin = async (req, res) => {
-  if (!req.body)
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing Login Information' });
+
+    const user = req.body;
+    if (!user || !user.email || !user.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing email or Password' });
+
+    const dbUser = await dbClient.findStudent({ email: user.email });
+    if (!dbUser)
+      return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
+
+    if (!bcrypt.compareSync(user.password, dbUser.password))
+      return res
+        .status(400)
+        .json({ status: 400, message: 'wrong email or password' });
+
+    const { password, ...loged } = dbUser;
+    const token = jwt.sign({ id: dbUser._id }, sct);
     return res
-      .status(400)
-      .json({ status: 400, message: 'Missing Login Information' });
-
-  const user = req.body;
-  if (!user || !user.email || !user.password)
-    return res
-      .status(400)
-      .json({ status: 400, message: 'Missing email or Password' });
-
-  const dbUser = await dbClient.findStudent({ email: user.email });
-  if (!dbUser)
-    return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
-
-  if (!bcrypt.compareSync(user.password, dbUser.password))
-    return res
-      .status(400)
-      .json({ status: 400, message: 'wrong email or password' });
-
-  const { password, ...loged } = dbUser;
-  const token = jwt.sign({ id: dbUser._id }, sct);
-  return res
-    .cookie('access_token', token, { httpOnly: true })
-    .status(200)
-    .json(loged);
+      .cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(loged);
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'server error' });
+  }
 };
 
-export const sLogout = (req, res) => {
+// teacher
+export const tRegister = async (req, res) => {
+  try {
+    const user = req.body;
+    if (!user || !user.name || !user.email || !user.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing Registration information' });
+
+    const verif = await dbClient.findTeacher({ email: user.email });
+    if (verif)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'user already exist' });
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(user.password, salt);
+
+    const newUser = {
+      name: user.name,
+      email: user.email,
+      password: hash,
+    };
+    await dbClient.insertTeacher(newUser);
+    return res
+      .status(200)
+      .json({ status: 200, message: 'user added successfully' });
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'server error' });
+  }
+};
+
+export const tLogin = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing Login Information' });
+
+    const user = req.body;
+    if (!user || !user.email || !user.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing email or Password' });
+
+    const dbUser = await dbClient.findTeacher({ email: user.email });
+    if (!dbUser)
+      return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
+
+    if (!bcrypt.compareSync(user.password, dbUser.password))
+      return res
+        .status(400)
+        .json({ status: 400, message: 'wrong email or password' });
+
+    const { password, ...loged } = dbUser;
+    const token = jwt.sign({ id: dbUser._id }, sct);
+    return res
+      .cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(loged);
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'server error' });
+  }
+};
+
+// admin
+export const aRegister = async (req, res) => {
+  try {
+    const user = req.body;
+    if (!user || !user.name || !user.email || !user.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing Registration information' });
+
+    const verif = await dbClient.findAdmin({ email: user.email });
+    if (verif)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'user already exist' });
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(user.password, salt);
+
+    const newUser = {
+      name: user.name,
+      email: user.email,
+      password: hash,
+    };
+    await dbClient.insertAdmin(newUser);
+    return res
+      .status(200)
+      .json({ status: 200, message: 'user added successfully' });
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'server error' });
+  }
+};
+
+export const aLogin = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing Login Information' });
+
+    const user = req.body;
+    if (!user || !user.email || !user.password)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Missing email or Password' });
+
+    const dbUser = await dbClient.findAdmin({ email: user.email });
+    if (!dbUser)
+      return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
+
+    if (!bcrypt.compareSync(user.password, dbUser.password))
+      return res
+        .status(400)
+        .json({ status: 400, message: 'wrong email or password' });
+
+    const { password, ...loged } = dbUser;
+    const token = jwt.sign({ id: dbUser._id }, sct);
+    return res
+      .cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(loged);
+  } catch (err) {
+    return res.status(500).json({ status: 500, message: 'server error' });
+  }
+};
+
+export const logout = (req, res) => {
   try {
     req.session.destroy((err) => {
       if (err) {
@@ -75,38 +215,4 @@ export const sLogout = (req, res) => {
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
-};
-
-// teacher
-export const tRegister = (req, res) => {
-  const user = req.body;
-  if (!user)
-    return res
-      .status(400)
-      .json({ status: 400, message: 'provide login information' });
-};
-
-export const tLogin = (req, res) => {
-  return res.send('login here');
-};
-
-export const tLogout = (req, res) => {
-  return res.send('logout implementation here');
-};
-
-// admin
-export const aRegister = (req, res) => {
-  const user = req.body;
-  if (!user)
-    return res
-      .status(400)
-      .json({ status: 400, message: 'provide login information' });
-};
-
-export const aLogin = (req, res) => {
-  return res.send('login here');
-};
-
-export const aLogout = (req, res) => {
-  return res.send('logout implementation here');
 };

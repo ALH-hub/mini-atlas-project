@@ -57,6 +57,14 @@ class DBClient {
   async insertTeacher(user) {
     return this.db.collection('teachers').insertOne(user);
   }
+
+  async findAdmin(user) {
+    return this.db.collection('admin').findOne(user);
+  }
+
+  async insertAdmin(user) {
+    return this.db.collection('admin').insertOne(user);
+  }
   // ... (rest of your code for find/insert methods)
 }
 
