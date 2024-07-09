@@ -30,8 +30,8 @@ const Login = () => {
         },
       );
       localStorage.setItem('token', response.data.token);
+      console.log('response header token', response.data.token);
       navigation(`/${role}`);
-      console.log(response);
     } catch (error) {
       setError(error.response.data.message);
       console.error(error);
