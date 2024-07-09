@@ -30,10 +30,14 @@ export const sRegister = async (req, res) => {
       email: user.email,
       password: hash,
     };
-    await dbClient.insertStudent(newUser);
+    const dbUser = await dbClient.insertStudent(newUser);
+
+    const { password, ...loged } = dbUser;
+    const token = jwt.sign({ id: dbUser.insertedId }, sct);
     return res
+      .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json({ status: 200, message: 'user added successfully' });
+      .json(loged);
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -97,10 +101,14 @@ export const tRegister = async (req, res) => {
       email: user.email,
       password: hash,
     };
-    await dbClient.insertTeacher(newUser);
+    const dbUser = await dbClient.insertTeacher(newUser);
+
+    const { password, ...loged } = dbUser;
+    const token = jwt.sign({ id: dbUser.insertedId }, sct);
     return res
+      .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json({ status: 200, message: 'teacher added successfully' });
+      .json(loged);
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -123,7 +131,7 @@ export const tLogin = async (req, res) => {
     if (!dbUser)
       return res
         .status(404)
-        .json({ status: 404, message: 'teacher NOT FOUND' });
+        .json({ status: 404, message: 'teacher not found' });
 
     if (!bcrypt.compareSync(user.password, dbUser.password))
       return res
@@ -164,10 +172,14 @@ export const aRegister = async (req, res) => {
       email: user.email,
       password: hash,
     };
-    await dbClient.insertAdmin(newUser);
+    const dbUser = await dbClient.insertAdmin(newUser);
+
+    const { password, ...loged } = dbUser;
+    const token = jwt.sign({ id: dbUser.insertedId }, sct);
     return res
+      .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json({ status: 200, message: 'admin added successfully' });
+      .json(loged);
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
