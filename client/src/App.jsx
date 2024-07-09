@@ -4,12 +4,14 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import TeacherHome from './pages/teacher/TeacherHome.jsx';
 import StudentHome from './pages/student/StudentHome.jsx';
 import AdminHome from './pages/admin/AdminHome.jsx';
-import SNavbar from './components/student/SNavbar.jsx';
+// import SNavbar from './components/student/SNavbar.jsx';
+import Navbar from './components/Navbar.jsx';
+import Write from './components/teacher/Write.jsx';
 
 const SLayout = () => {
   return (
     <>
-      <SNavbar />
+      <Navbar />
       <Outlet />
     </>
   );
@@ -21,16 +23,37 @@ const BrowserRouter = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: '/register',
+    element: <Register />,
+  },
+  {
     path: '/',
     element: <Login />,
   },
   {
     path: '/admin',
-    element: <AdminHome />,
+    element: <SLayout />,
+    children: [
+      {
+        path: '/admin',
+        element: <AdminHome />,
+      },
+    ],
   },
+
   {
     path: '/teacher',
-    element: <TeacherHome />,
+    element: <SLayout />,
+    children: [
+      {
+        path: '/teacher',
+        element: <TeacherHome />,
+      },
+      {
+        path: '/teacher/write',
+        element: <Write />,
+      },
+    ],
   },
   {
     path: '/student',
@@ -41,10 +64,6 @@ const BrowserRouter = createBrowserRouter([
         element: <StudentHome />,
       },
     ],
-  },
-  {
-    path: '/register',
-    element: <Register />,
   },
 ]);
 
