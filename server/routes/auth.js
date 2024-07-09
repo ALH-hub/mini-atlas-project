@@ -12,16 +12,16 @@ import express from 'express';
 const route = express.Router();
 
 // student
-route.post('/sregister', sRegister);
-route.post('/slogin', sLogin);
+route.post('/student/register', sRegister);
+route.post('/student/login', sLogin);
 
 // teacher
-route.post('/tregister', tRegister);
-route.post('/tlogin', tLogin);
+route.post('/teacher/register', tRegister);
+route.post('/teacher/login', tLogin);
 
 // admin
-route.post('/aregister', aRegister);
-route.post('/alogin', aLogin);
+route.post('/admin/register', aRegister);
+route.post('/admin/login', aLogin);
 
 route.post('/logout', logout);
 

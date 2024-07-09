@@ -54,7 +54,9 @@ export const sLogin = async (req, res) => {
 
     const dbUser = await dbClient.findStudent({ email: user.email });
     if (!dbUser)
-      return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
+      return res
+        .status(404)
+        .json({ status: 404, message: 'student NOT FOUND' });
 
     if (!bcrypt.compareSync(user.password, dbUser.password))
       return res
@@ -85,7 +87,7 @@ export const tRegister = async (req, res) => {
     if (verif)
       return res
         .status(400)
-        .json({ status: 400, message: 'user already exist' });
+        .json({ status: 400, message: 'teacher already exist' });
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(user.password, salt);
@@ -98,7 +100,7 @@ export const tRegister = async (req, res) => {
     await dbClient.insertTeacher(newUser);
     return res
       .status(200)
-      .json({ status: 200, message: 'user added successfully' });
+      .json({ status: 200, message: 'teacher added successfully' });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -119,7 +121,9 @@ export const tLogin = async (req, res) => {
 
     const dbUser = await dbClient.findTeacher({ email: user.email });
     if (!dbUser)
-      return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
+      return res
+        .status(404)
+        .json({ status: 404, message: 'teacher NOT FOUND' });
 
     if (!bcrypt.compareSync(user.password, dbUser.password))
       return res
@@ -150,7 +154,7 @@ export const aRegister = async (req, res) => {
     if (verif)
       return res
         .status(400)
-        .json({ status: 400, message: 'user already exist' });
+        .json({ status: 400, message: 'admin already exist' });
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(user.password, salt);
@@ -163,7 +167,7 @@ export const aRegister = async (req, res) => {
     await dbClient.insertAdmin(newUser);
     return res
       .status(200)
-      .json({ status: 200, message: 'user added successfully' });
+      .json({ status: 200, message: 'admin added successfully' });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -184,7 +188,7 @@ export const aLogin = async (req, res) => {
 
     const dbUser = await dbClient.findAdmin({ email: user.email });
     if (!dbUser)
-      return res.status(404).json({ status: 404, message: 'user NOT FOUND' });
+      return res.status(404).json({ status: 404, message: 'admin NOT FOUND' });
 
     if (!bcrypt.compareSync(user.password, dbUser.password))
       return res
