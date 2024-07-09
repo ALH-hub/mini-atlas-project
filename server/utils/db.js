@@ -13,8 +13,6 @@ class DBClient {
 
   async connect() {
     try {
-      console.log('Connecting to database:', uri); // Print the connection string for debugging
-
       const client = new MongoClient(uri, {
         serverApi: {
           version: ServerApiVersion.v1,
@@ -23,10 +21,8 @@ class DBClient {
         },
       });
 
-      console.log('trynna connect');
       await client.connect();
       this.db = client.db('atlasdb');
-
       console.log('Connected to database');
     } catch (error) {
       console.error('Could not connect to database\n', error);
