@@ -1,11 +1,41 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
   const [role, setRole] = useState('student');
+  const [user, setUser] = useState({
+    email: '',
+    password: '',
+  });
+  const [error, setError] = useState('');
+  const navigation = useNavigate();
 
   const handleUserTypeChange = (event) => {
     setRole(event.target.value);
+  };
+
+  const handleInputChange = (event) => {
+    setUser({ ...user, [event.target.name]: event.target.value });
+  };
+
+  const hadleSubmission = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        `http://localhost:3030/api/auth/${role}/login`,
+        {
+          email: user.email,
+          password: user.password,
+        },
+      );
+      localStorage.setItem('token', response.data.token);
+      navigation(`/${role}`);
+      console.log(response);
+    } catch (error) {
+      setError(error.response.data.message);
+      console.error(error);
+    }
   };
 
   const renderLoginOptions = () => {
@@ -44,6 +74,7 @@ const Login = () => {
             placeholder='email'
             name='email'
             required
+            onChange={handleInputChange}
           />
           <input
             className='h-10 w-9/12 rounded-md border border-black p-2 focus:outline-none'
@@ -51,13 +82,16 @@ const Login = () => {
             placeholder='password'
             name='password'
             required
+            onChange={handleInputChange}
           />
           <button
             className='bg-blue-300 p-2 text-center w-1/3 border border-blue-300 rounded-md cursor-pointer hover:bg-white hover:text-blue-500 hover:border hover:border-blue-500'
             type='submit'
+            onClick={hadleSubmission}
           >
             Login
           </button>
+          {error && <span className='text-red-600'>{error}</span>}
           <div className='flex flex-col items-center'>
             <span className='text-sm'>
               Don&apos;t have an account?{' '}
@@ -67,7 +101,6 @@ const Login = () => {
             </span>
             <span className='text-sm '>Login as a: {renderLoginOptions()}</span>
           </div>
-          {console.log('This is the current role: ', role)}
         </form>
       </div>
     </div>
