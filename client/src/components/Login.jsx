@@ -91,7 +91,7 @@ const Login = () => {
           >
             Login
           </button>
-          {error && <span className='text-red-600'>{error}</span>}
+          {error && <span className='text-red-500 tex-sm'>{error}</span>}
           <div className='flex flex-col items-center'>
             <span className='text-sm'>
               Don&apos;t have an account?{' '}
