@@ -37,7 +37,7 @@ export const sRegister = async (req, res) => {
     return res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json(loged);
+      .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -72,7 +72,7 @@ export const sLogin = async (req, res) => {
     return res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json(loged);
+      .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -108,7 +108,7 @@ export const tRegister = async (req, res) => {
     return res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json(loged);
+      .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -143,7 +143,7 @@ export const tLogin = async (req, res) => {
     return res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json(loged);
+      .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -179,7 +179,7 @@ export const aRegister = async (req, res) => {
     return res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json(loged);
+      .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -212,7 +212,7 @@ export const aLogin = async (req, res) => {
     return res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json(loged);
+      .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
