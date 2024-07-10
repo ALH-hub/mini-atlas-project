@@ -10,7 +10,7 @@ const Register = () => {
     password: '',
   });
   const [error, setError] = useState('');
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -25,10 +25,10 @@ const Register = () => {
           name: user.name,
           email: user.email,
           password: user.password,
+          role: 'student',
         },
       );
-      localStorage.setItem('token', response.data.token);
-      navigation('/student');
+      navigate('/login');
       console.log(response);
     } catch (error) {
       setError(error.response.data.message);

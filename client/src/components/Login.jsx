@@ -30,7 +30,7 @@ const Login = () => {
         },
       );
       localStorage.setItem('token', response.data.token);
-      console.log('response header token', response.data.token);
+      localStorage.setItem('role', role);
       navigation(`/${role}`);
     } catch (error) {
       setError(error.response.data.message);

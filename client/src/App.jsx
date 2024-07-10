@@ -7,6 +7,7 @@ import AdminHome from './pages/admin/AdminHome.jsx';
 // import SNavbar from './components/student/SNavbar.jsx';
 import Navbar from './components/Navbar.jsx';
 import Write from './components/teacher/Write.jsx';
+import Unauthorized from './components/Unauthorized.jsx';
 
 const SLayout = () => {
   return (
@@ -64,6 +65,10 @@ const BrowserRouter = createBrowserRouter([
         element: <StudentHome />,
       },
     ],
+  },
+  {
+    path: '/unauthorized',
+    element: <Unauthorized />,
   },
 ]);
 
