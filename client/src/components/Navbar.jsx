@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className='flex justify-between py-2 px-10 border border-black z-10 bg-white fixed inset-x-0'>
+    <nav className='flex justify-between py-2 px-10 border border-gray-400 z-10 bg-white fixed inset-x-0'>
       <img className='rounded-xl' width='40px' src={logo} alt='' />
       <div className='flex items-center gap-4'>
         <img className='rounded-xl' src={csc} alt='' width='40px' />
