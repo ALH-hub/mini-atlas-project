@@ -2,6 +2,7 @@ import dbClient from '../utils/db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { ObjectId } from 'mongodb';
 
 dotenv.config();
 
@@ -28,16 +29,13 @@ export const sRegister = async (req, res) => {
     const newUser = {
       name: user.name,
       email: user.email,
+      role: 'student',
       password: hash,
     };
-    const dbUser = await dbClient.insertStudent(newUser);
 
-    const { password, ...loged } = dbUser;
-    const token = jwt.sign({ id: dbUser.insertedId }, sct);
-    return res
-      .cookie('access_token', token, { httpOnly: true })
-      .status(200)
-      .json({ ...loged, token });
+    await dbClient.insertStudent(newUser);
+
+    return res.status(200).json(newUser);
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -99,16 +97,12 @@ export const tRegister = async (req, res) => {
     const newUser = {
       name: user.name,
       email: user.email,
+      role: 'teacher',
       password: hash,
     };
-    const dbUser = await dbClient.insertTeacher(newUser);
+    await dbClient.insertTeacher(newUser);
 
-    const { password, ...loged } = dbUser;
-    const token = jwt.sign({ id: dbUser.insertedId }, sct);
-    return res
-      .cookie('access_token', token, { httpOnly: true })
-      .status(200)
-      .json({ ...loged, token });
+    return res.status(200).json(newUser);
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -170,16 +164,12 @@ export const aRegister = async (req, res) => {
     const newUser = {
       name: user.name,
       email: user.email,
+      role: 'admin',
       password: hash,
     };
-    const dbUser = await dbClient.insertAdmin(newUser);
+    await dbClient.insertAdmin(newUser);
 
-    const { password, ...loged } = dbUser;
-    const token = jwt.sign({ id: dbUser.insertedId }, sct);
-    return res
-      .cookie('access_token', token, { httpOnly: true })
-      .status(200)
-      .json({ ...loged, token });
+    return res.status(200).json(newUser);
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
   }
@@ -215,6 +205,75 @@ export const aLogin = async (req, res) => {
       .json({ ...loged, token });
   } catch (err) {
     return res.status(500).json({ status: 500, message: 'server error' });
+  }
+};
+
+export const sGetme = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = authHeader.split(' ')[1];
+    let { id } = jwt.verify(token, sct);
+    if (!id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    id = new ObjectId(id);
+    const user = await dbClient.findStudent({ _id: id });
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const { password, ...loged } = user;
+    return res.status(200).json(loged);
+  } catch (error) {
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const tGetme = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = authHeader.split(' ')[1];
+    let { id } = jwt.verify(token, sct);
+    if (!id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    id = new ObjectId(id);
+    const user = await dbClient.findTeacher({ _id: id });
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const { password, ...loged } = user;
+    return res.status(200).json(loged);
+  } catch (error) {
+    return res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const aGetme = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = authHeader.split(' ')[1];
+    let { id } = jwt.verify(token, sct);
+    if (!id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    id = new ObjectId(id);
+    const user = await dbClient.findAdmin({ _id: id });
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const { password, ...loged } = user;
+    return res.status(200).json(loged);
+  } catch (error) {
+    return res.status(500).json({ message: 'Server Error' });
   }
 };
 

@@ -34,12 +34,24 @@ class DBClient {
     return !!this.db;
   }
 
-  async findChapter(chap) {
-    return this.db.collection('chapters').findOne(chap);
+  async findNote(chap) {
+    return this.db.collection('notes').findOne(chap);
   }
 
-  async insertChapter(chap) {
-    return this.db.collection('chapters').insertOne(chap);
+  async getNotes() {
+    return this.db.collection('notes').find().toArray();
+  }
+
+  async insertNote(chap) {
+    return this.db.collection('notes').insertOne(chap);
+  }
+
+  async updateNote(id, chap) {
+    return this.db.collection('notes').updateOne(id, chap);
+  }
+
+  async deleteNote(chap) {
+    return this.db.collection('notes').deleteOne(chap);
   }
 
   async findStudent(stud) {
@@ -50,12 +62,21 @@ class DBClient {
     return this.db.collection('students').insertOne(stud);
   }
 
-  async findTeacher(user) {
-    return this.db.collection('teachers').findOne(user);
+  async deleteStudent(stud) {
+    return this.db.collection('students').deleteOne(stud);
+  }
+
+  async findTeacher(id) {
+    console.log('finding teacher');
+    return this.db.collection('teachers').findOne(id);
   }
 
   async insertTeacher(user) {
     return this.db.collection('teachers').insertOne(user);
+  }
+
+  async deleteTeacher(user) {
+    return this.db.collection('teachers').deleteOne(user);
   }
 
   async findAdmin(user) {
@@ -65,6 +86,11 @@ class DBClient {
   async insertAdmin(user) {
     return this.db.collection('admin').insertOne(user);
   }
+
+  async deleteAdmin(user) {
+    return this.db.collection('admin').deleteOne(user);
+  }
+
   // ... (rest of your code for find/insert methods)
 }
 
