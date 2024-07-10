@@ -58,8 +58,11 @@ const Login = () => {
     );
   };
 
+  {
+    /*bg-gradient-to-b from-blue-100 via-transparent to-blue-500*/
+  }
   return (
-    <div className='bg-gradient-to-b from-blue-100 via-transparent to-blue-500 h-screen flex justify-center items-center'>
+    <div className=' h-screen flex justify-center items-center'>
       <div className='flex flex-col items-center justify-center p-8 gap-2 bg-transparent w-1/2'>
         <h1 className='text-3xl font-bold underline text-blue-600'>
           Login as {role}
@@ -91,7 +94,7 @@ const Login = () => {
           >
             Login
           </button>
-          {error && <span className='text-red-500 tex-sm'>{error}</span>}
+          {error && <span className='text-red-500 text-xs'>{error}</span>}
           <div className='flex flex-col items-center'>
             <span className='text-sm'>
               Don&apos;t have an account?{' '}

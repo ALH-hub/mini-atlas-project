@@ -37,7 +37,7 @@ const Register = () => {
   };
 
   return (
-    <div className='bg-gradient-to-b from-blue-100 via-transparent to-blue-500 h-screen flex justify-center items-center'>
+    <div className='h-screen flex justify-center items-center'>
       <div className='flex flex-col items-center justify-center p-8 gap-2 bg-transparent w-1/2'>
         <h1 className='text-3xl font-bold underline text-blue-600'>Register</h1>
         <form
