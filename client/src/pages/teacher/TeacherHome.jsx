@@ -55,18 +55,18 @@ const TeacherHome = () => {
   return (
     <div className='flex'>
       <div className='top-0 left-0 w-[250px] h-full overflow-y-auto pt-20 px-8 fixed border border-gray-400'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
           <h1 className='font-bold mb-2 border-b border-b-gray-400 text-center'>
             Chapters
           </h1>
           <Link to='/write'>
-            <img className='w-6 ml-auto mr-6' src={add} alt='' />
+            <img className='w-5 ml-auto' src={add} alt='' />
           </Link>
         </div>
-        <ol className='list-decimal pl-4 block'>
+        <ol className='list-decimal pl-4'>
           {notes.map((note) => (
             <button
-              className='mb-[10px] cursor-pointer'
+              className='mb-[10px] cursor-pointer block'
               key={note.chapter}
               onClick={() => setChapter(note)}
             >
