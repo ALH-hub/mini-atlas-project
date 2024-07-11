@@ -85,11 +85,11 @@ const TeacherHome = () => {
         </p>
         {formatContent && (
           <div className='flex items-center justify-end gap-6 mt-4'>
-            <Link to='/write?edit' state={chapter}>
-              <img className='w-[20px]' src={edit} alt='' />
+            <Link className='w-[20px] rounded' to='/write?edit' state={chapter}>
+              <img className='w-fit rounded' src={edit} alt='' />
             </Link>
-            <button onClick={handleDeleteNote}>
-              <img className='w-[20px]' src={trash} alt='' />
+            <button className='w-[17px] rounded' onClick={handleDeleteNote}>
+              <img className='w-fit rounded' src={trash} alt='' />
             </button>
           </div>
         )}
