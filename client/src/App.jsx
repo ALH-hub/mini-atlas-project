@@ -50,8 +50,14 @@ const BrowserRouter = createBrowserRouter([
         path: '/teacher',
         element: <TeacherHome />,
       },
+    ],
+  },
+  {
+    path: '/write',
+    element: <SLayout />,
+    children: [
       {
-        path: '/teacher/write',
+        path: '/write',
         element: <Write />,
       },
     ],

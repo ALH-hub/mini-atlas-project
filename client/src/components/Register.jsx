@@ -1,6 +1,6 @@
 // import background from '/background.png';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
@@ -36,6 +36,10 @@ const Register = () => {
     }
   };
 
+  const storedRole = localStorage.getItem('role');
+  if (storedRole) {
+    return <Navigate to={`/${storedRole}`} />;
+  }
   return (
     <div className='h-screen flex justify-center items-center'>
       <div className='flex flex-col items-center justify-center p-8 gap-2 bg-transparent w-1/2'>

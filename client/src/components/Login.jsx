@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -58,8 +58,9 @@ const Login = () => {
     );
   };
 
-  {
-    /*bg-gradient-to-b from-blue-100 via-transparent to-blue-500*/
+  const storedRole = localStorage.getItem('role');
+  if (storedRole) {
+    return <Navigate to={`/${storedRole}`} />;
   }
   return (
     <div className=' h-screen flex justify-center items-center'>

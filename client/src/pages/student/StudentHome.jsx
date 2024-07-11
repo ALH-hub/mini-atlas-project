@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const StudentHome = () => {
-  const storage = localStorage.getItem('token');
   const [notes, setNotes] = useState([]);
   const [chapter, setChapter] = useState({});
 
@@ -20,8 +19,13 @@ const StudentHome = () => {
     fetchNotes();
   }, []);
 
-  if (!storage) {
+  const storedRole = localStorage.getItem('role');
+
+  if (!storedRole) {
     return <Navigate to='/login' />;
+  }
+  if (storedRole !== 'student') {
+    return <Navigate to='/unauthorized' />;
   }
   return (
     <div className='flex'>

@@ -3,15 +3,20 @@ import 'react-quill/dist/quill.snow.css';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Write = ({ value }) => {
-  const [notes, setNotes] = useState({
-    title: '',
-    content: '',
-  });
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const storedRole = localStorage.getItem('role');
+  const navigate = useNavigate();
 
-  const handleInputChange = (content) => {
-    setNotes({ ...notes, content });
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleContentChange = (value) => {
+    setContent(value);
   };
 
   const handleSubmission = async (event) => {
@@ -19,7 +24,7 @@ const Write = ({ value }) => {
     try {
       const response = await axios.post(
         'http://localhost:3030/api/notes',
-        notes,
+        { title, content },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -27,10 +32,19 @@ const Write = ({ value }) => {
         },
       );
       console.log(response);
+      navigate(`/${storedRole}`);
     } catch (error) {
       console.error(error);
     }
   };
+
+  if (!storedRole) {
+    return <Navigate to='/login' />;
+  }
+  console.log(storedRole);
+  if (storedRole !== 'teacher' && storedRole !== 'admin') {
+    return <Navigate to='/unauthorized' />;
+  }
 
   return (
     <div className='flex flex-grow overflow-auto justify-center pt-40'>
@@ -44,17 +58,17 @@ const Write = ({ value }) => {
           type='text'
           name='title'
           id='title'
-          onChange={handleInputChange}
+          onChange={handleTitleChange}
           required
         />
         <ReactQuill
           className='w-full p-2 rounded-md mb-4 h-4/5'
           theme='snow'
-          value={value ? value : ''}
           placeholder='Enter Chapter content here'
           id='content'
           name='content'
-          onChange={handleInputChange}
+          onChange={handleContentChange}
+          required
         />
         <div className='flex justify-end w-full gap-8 mt-4'>
           <button
