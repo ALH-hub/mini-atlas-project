@@ -18,4 +18,5 @@ app.use('/api/notes', notesRoutes);
 
 app.listen(3030, () => {
   console.log('connected on port 3030!!');
+  console.log('trying to connect to db...');
 });

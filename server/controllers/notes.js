@@ -30,23 +30,21 @@ export const createNote = async (req, res) => {
     }
 
     id = new ObjectId(id);
-
     const user = await dbClient.findTeacher({
       _id: id,
     });
-    console.log(user);
     if (!user) {
       return res.status(401).json({ message: 'Unauthorized', user });
     }
 
     const note = req.body;
-    if (!note.title || !note.content || !note.chapter) {
+    if (!note.title || !note.content) {
       return res.status(400).json({ message: 'Missing fields' });
     }
     const newNote = await dbClient.insertNote({
       title: note.title,
       content: note.content,
-      chapter: note.chapter,
+      chapter: (await dbClient.countNotes()) + 1,
       user: user._id,
     });
     return res

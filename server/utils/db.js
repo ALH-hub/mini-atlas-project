@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const uri = process.env.URL;
+const uri = process.env.URL ? process.env.URL : 'mongodb://localhost:27017';
 
 class DBClient {
   constructor() {
@@ -13,14 +13,15 @@ class DBClient {
 
   async connect() {
     try {
+      const connectTimeoutMS = 60000;
       const client = new MongoClient(uri, {
         serverApi: {
           version: ServerApiVersion.v1,
           strict: true,
           deprecationErrors: true,
         },
+        connectTimeoutMS,
       });
-
       await client.connect();
       this.db = client.db('atlasdb');
       console.log('Connected to database');
@@ -40,6 +41,10 @@ class DBClient {
 
   async getNotes() {
     return this.db.collection('notes').find().toArray();
+  }
+
+  async countNotes() {
+    return this.db.collection('notes').countDocuments();
   }
 
   async insertNote(chap) {
@@ -67,7 +72,6 @@ class DBClient {
   }
 
   async findTeacher(id) {
-    console.log('finding teacher');
     return this.db.collection('teachers').findOne(id);
   }
 
