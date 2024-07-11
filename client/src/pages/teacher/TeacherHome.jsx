@@ -54,8 +54,8 @@ const TeacherHome = () => {
   }
   return (
     <div className='flex'>
-      <div className='top-0 left-0 w-[250px] h-full overflow-y-auto pt-20 px-8 fixed border border-gray-400'>
-        <div className='flex justify-between items-center'>
+      <div className='top-0 left-0 w-[250px] h-full overflow-y-auto pt-20 pl-4 fixed border border-gray-400'>
+        <div className='flex justify-between items-center pl-2 pr-4 mb-2'>
           <h1 className='font-bold mb-2 border-b border-b-gray-400 text-center'>
             Chapters
           </h1>
