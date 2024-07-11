@@ -13,6 +13,7 @@ export const getNotes = async (req, res) => {
     const notes = await dbClient.getNotes();
     return res.status(200).json(notes);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'Server Error' });
   }
 };
@@ -65,28 +66,32 @@ export const updateNote = async (req, res) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, sct);
-    if (!decoded) {
-      return res.status(401).json({ message: 'Unauthorized' });
+    let { id } = jwt.verify(token, sct); // Use let for id
+    if (!id) {
+      return res.status(401).json({ message: 'Unauthorized jwt', id });
     }
 
-    const user = await dbClient.findStudent({ _id: decoded.id });
+    id = new ObjectId(id);
+    const user = await dbClient.findTeacher({
+      _id: id,
+    });
     if (!user) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'Unauthorized', user });
     }
 
     const note = req.body;
-    const newNote = await dbClient.updateNote(
-      { chapter: req.params.id },
-      {
-        title: note.title,
-        content: note.content,
-        user: user._id,
-      },
-    );
+    const chapter = parseInt(req.params.id, 10);
+    const updateFields = {};
+
+    if (note.title !== undefined) updateFields.title = note.title;
+    if (note.content !== undefined) updateFields.content = note.content;
+    updateFields.user = user._id;
+
+    const newNote = await dbClient.updateNote({ chapter }, updateFields);
     return res.status(200).json({ status: 200, message: 'Note updated' });
   } catch (error) {
-    return res.status(500).json({ message: 'Server Error' });
+    console.log(error);
+    return res.status(500).json({ message: 'Server Error', error });
   }
 };
 
@@ -97,19 +102,25 @@ export const deleteNote = async (req, res) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, sct);
-    if (!decoded) {
-      return res.status(401).json({ message: 'Unauthorized' });
+    let { id } = jwt.verify(token, sct); // Use let for id
+    if (!id) {
+      return res.status(401).json({ message: 'Unauthorized jwt', id });
     }
 
-    const user = await dbClient.findNote({ _id: decoded.id });
+    id = new ObjectId(id);
+    const user = await dbClient.findTeacher({
+      _id: id,
+    });
     if (!user) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'Unauthorized', user });
     }
 
-    const newNote = await dbClient.deleteNote({ chapter: req.params.id });
+    const newNote = await dbClient.deleteNote({
+      chapter: parseInt(req.params.id, 10),
+    });
     return res.status(200).json({ status: 200, message: 'Note deleted' });
   } catch (error) {
-    return res.status(500).json({ message: 'Server Error' });
+    console.log(error);
+    return res.status(500).json({ message: 'Server Error', error });
   }
 };

@@ -51,8 +51,15 @@ class DBClient {
     return this.db.collection('notes').insertOne(chap);
   }
 
-  async updateNote(id, chap) {
-    return this.db.collection('notes').updateOne(id, chap);
+  async updateNote(filter, update) {
+    try {
+      const result = await this.db
+        .collection('notes')
+        .updateOne(filter, { $set: update });
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async deleteNote(chap) {
