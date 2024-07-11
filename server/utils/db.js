@@ -24,10 +24,9 @@ class DBClient {
       });
       await client.connect();
       this.db = client.db('atlasdb');
-      console.log('Connected to database');
+      console.log('Connected to database!!!');
     } catch (error) {
       console.error('Could not connect to database\n', error);
-      // Consider retrying the connection or handling the error gracefully
     }
   }
 
@@ -36,19 +35,39 @@ class DBClient {
   }
 
   async findNote(chap) {
-    return this.db.collection('notes').findOne(chap);
+    try {
+      return await this.db.collection('notes').findOne(chap);
+    } catch (error) {
+      console.error('Error finding note:', error);
+      throw error;
+    }
   }
 
   async getNotes() {
-    return this.db.collection('notes').find().toArray();
+    try {
+      return await this.db.collection('notes').find().toArray();
+    } catch (error) {
+      console.error('Error getting all notes:', error);
+      throw error;
+    }
   }
 
   async countNotes() {
-    return this.db.collection('notes').countDocuments();
+    try {
+      return await this.db.collection('notes').countDocuments();
+    } catch (error) {
+      console.error('Error counting notes:', error);
+      throw error;
+    }
   }
 
   async insertNote(chap) {
-    return this.db.collection('notes').insertOne(chap);
+    try {
+      return await this.db.collection('notes').insertOne(chap);
+    } catch (error) {
+      console.error('Error inserting note:', error);
+      throw error;
+    }
   }
 
   async updateNote(filter, update) {
@@ -63,45 +82,94 @@ class DBClient {
   }
 
   async deleteNote(chap) {
-    return this.db.collection('notes').deleteOne(chap);
+    try {
+      return await this.db.collection('notes').deleteOne(chap);
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      throw error;
+    }
   }
 
   async findStudent(stud) {
-    return this.db.collection('students').findOne(stud);
+    try {
+      return await this.db.collection('students').findOne(stud);
+    } catch (error) {
+      console.error('Error finding student:', error);
+      throw error;
+    }
   }
 
   async insertStudent(stud) {
-    return this.db.collection('students').insertOne(stud);
+    try {
+      return await this.db.collection('students').insertOne(stud);
+    } catch (error) {
+      console.error('Error inserting student:', error);
+      throw error;
+    }
   }
 
   async deleteStudent(stud) {
-    return this.db.collection('students').deleteOne(stud);
+    try {
+      return await this.db.collection('students').deleteOne(stud);
+    } catch (error) {
+      console.error('Error deleting student:', error);
+      throw error;
+    }
   }
 
   async findTeacher(id) {
-    return this.db.collection('teachers').findOne(id);
+    try {
+      return await this.db.collection('teachers').findOne(id);
+    } catch (error) {
+      console.error('Error finding teacher:', error);
+      throw error;
+    }
   }
 
   async insertTeacher(user) {
-    return this.db.collection('teachers').insertOne(user);
+    try {
+      return await this.db.collection('teachers').insertOne(user);
+    } catch (error) {
+      console.error('Error inserting teacher:', error);
+      throw error;
+    }
   }
 
   async deleteTeacher(user) {
-    return this.db.collection('teachers').deleteOne(user);
+    try {
+      return await this.db.collection('teachers').deleteOne(user);
+    } catch (error) {
+      console.error('Error deleting teacher:', error);
+      throw error;
+    }
   }
 
   async findAdmin(user) {
-    return this.db.collection('admin').findOne(user);
+    try {
+      return await this.db.collection('admin').findOne(user);
+    } catch (error) {
+      console.error('Error finding admin:', error);
+      throw error;
+    }
   }
 
   async insertAdmin(user) {
-    return this.db.collection('admin').insertOne(user);
+    try {
+      return await this.db.collection('admin').insertOne(user);
+    } catch (error) {
+      console.error('Error inserting admin:', error);
+      throw error;
+    }
   }
 
   async deleteAdmin(user) {
-    return this.db.collection('admin').deleteOne(user);
+    try {
+      return await this.db.collection('admin').deleteOne(user);
+    } catch (error) {
+      console.error('Error deleting admin:', error);
+      throw error;
+    }
   }
-
   // ... (rest of your code for find/insert methods)
 }
 
