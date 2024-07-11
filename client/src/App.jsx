@@ -8,11 +8,21 @@ import AdminHome from './pages/admin/AdminHome.jsx';
 import Navbar from './components/Navbar.jsx';
 import Write from './components/teacher/Write.jsx';
 import Unauthorized from './components/Unauthorized.jsx';
+import TeacherNav from './components/teacher/TeacherNav.jsx';
 
 const SLayout = () => {
   return (
     <>
       <Navbar />
+      <Outlet />
+    </>
+  );
+};
+
+const TLayout = () => {
+  return (
+    <>
+      <TeacherNav />
       <Outlet />
     </>
   );
@@ -44,7 +54,7 @@ const BrowserRouter = createBrowserRouter([
 
   {
     path: '/teacher',
-    element: <SLayout />,
+    element: <TLayout />,
     children: [
       {
         path: '/teacher',
@@ -54,7 +64,7 @@ const BrowserRouter = createBrowserRouter([
   },
   {
     path: '/write',
-    element: <SLayout />,
+    element: <TLayout />,
     children: [
       {
         path: '/write',

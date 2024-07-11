@@ -19,7 +19,6 @@ const TeacherHome = () => {
       try {
         const res = await axios.get('http://localhost:3030/api/notes');
         setNotes(res.data);
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -57,14 +56,19 @@ const TeacherHome = () => {
   }
   return (
     <div className='flex'>
-      <div className='top-0 left-0 w-[250px] h-full overflow-y-scroll pt-20 px-8 fixed border border-gray-400'>
-        <h1 className='font-bold mb-2 border-b border-b-gray-400 text-center'>
-          Chapters
-        </h1>
-        <ol className='list-decimal pl-4 '>
+      <div className='top-0 left-0 w-[250px] h-full overflow-y-auto pt-20 px-8 fixed border border-gray-400'>
+        <div className='flex justify-between'>
+          <h1 className='font-bold mb-2 border-b border-b-gray-400 text-center'>
+            Chapters
+          </h1>
+          <Link to='/write'>
+            <img className='w-6 ml-auto mr-6' src={add} alt='' />
+          </Link>
+        </div>
+        <ol className='list-decimal pl-4 block'>
           {notes.map((note) => (
             <button
-              className='mb-2 cursor-pointer'
+              className='mb-[10px] cursor-pointer'
               key={note.chapter}
               onClick={() => setChapter(note)}
             >
@@ -72,9 +76,6 @@ const TeacherHome = () => {
             </button>
           ))}
         </ol>
-        <Link to='/write'>
-          <img className='w-6 ml-auto mr-6' src={add} alt='' />
-        </Link>
       </div>
       <div className='px-4 pt-20 ml-[250px] flex-1 pb-4 text-justify '>
         <h1 className='text-center font-bold text-xl mb-4 border-b border-b-gray-400'>

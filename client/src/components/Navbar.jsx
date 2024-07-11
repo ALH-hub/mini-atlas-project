@@ -1,7 +1,6 @@
 import user from '/user.png';
 import logo from '/logo.png';
 import { useNavigate } from 'react-router-dom';
-import csc from '/csc.png';
 
 const Navbar = () => {
   const navigate = useNavigate();
