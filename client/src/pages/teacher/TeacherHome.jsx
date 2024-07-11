@@ -4,13 +4,15 @@ import add from '/add.svg';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const TeacherHome = () => {
   const [notes, setNotes] = useState([]);
   const [chapter, setChapter] = useState({});
   const [formatContent, setFormatContent] = useState('');
+  const storedRole = localStorage.getItem('role');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -25,12 +27,27 @@ const TeacherHome = () => {
     fetchNotes();
   }, []);
 
+  const handleDeleteNote = async () => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3030/api/notes/${chapter.chapter}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
+      console.log(res);
+      navigate(0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const clean = DOMPurify.sanitize(chapter.content);
     setFormatContent(clean);
   }, [chapter]);
-
-  const storedRole = localStorage.getItem('role');
 
   if (!storedRole) {
     return <Navigate to='/login' />;
@@ -66,12 +83,16 @@ const TeacherHome = () => {
         <p className='leading-loose'>
           {<div dangerouslySetInnerHTML={{ __html: formatContent }}></div>}
         </p>
-        <div className='flex items-center justify-end gap-6 mt-4'>
-          <Link to='/write?edit'>
-            <img className='w-6' src={edit} alt='' />
-          </Link>
-          <img className='w-6' src={trash} alt='' />
-        </div>
+        {formatContent && (
+          <div className='flex items-center justify-end gap-6 mt-4'>
+            <Link to='/write?edit' state={chapter}>
+              <img className='w-[20px]' src={edit} alt='' />
+            </Link>
+            <button onClick={handleDeleteNote}>
+              <img className='w-[20px]' src={trash} alt='' />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

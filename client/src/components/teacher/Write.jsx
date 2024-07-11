@@ -3,11 +3,12 @@ import 'react-quill/dist/quill.snow.css';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 
-const Write = ({ value }) => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+const Write = () => {
+  const state = useLocation().state;
+  const [title, setTitle] = useState(state?.title || '');
+  const [content, setContent] = useState(state?.content || '');
   const storedRole = localStorage.getItem('role');
   const navigate = useNavigate();
 
@@ -22,20 +23,33 @@ const Write = ({ value }) => {
   const handleSubmission = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:3030/api/notes',
-        { title, content },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      );
-      console.log(response);
+      state
+        ? await axios.put(
+            `http://localhost:3030/api/notes/${state.chapter}`,
+            { title, content },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            },
+          )
+        : await axios.post(
+            'http://localhost:3030/api/notes',
+            { title, content },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            },
+          );
       navigate(`/${storedRole}`);
     } catch (error) {
-      console.error(error);
+      console.error('error occured', error);
     }
+  };
+
+  const handleCancel = () => {
+    navigate(`/${storedRole}`);
   };
 
   if (!storedRole) {
@@ -57,6 +71,7 @@ const Write = ({ value }) => {
           placeholder='Enter Chapter title here'
           type='text'
           name='title'
+          value={title}
           id='title'
           onChange={handleTitleChange}
           required
@@ -66,6 +81,7 @@ const Write = ({ value }) => {
           theme='snow'
           placeholder='Enter Chapter content here'
           id='content'
+          value={content}
           name='content'
           onChange={handleContentChange}
           required
@@ -77,7 +93,10 @@ const Write = ({ value }) => {
           >
             Save
           </button>
-          <button className='border border-lightgray-400 px-2 py-1 text-sm rounded h-fit hover:bg-blue-200'>
+          <button
+            onClick={handleCancel}
+            className='border border-lightgray-400 px-2 py-1 text-sm rounded h-fit hover:bg-blue-200'
+          >
             Cancel
           </button>
         </div>
