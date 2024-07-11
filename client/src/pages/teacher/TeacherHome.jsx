@@ -2,10 +2,11 @@ import edit from '/edit.svg';
 import trash from '/trash.svg';
 import add from '/add.svg';
 import axios from 'axios';
-import DOMPurify from 'dompurify';
 
+import DOMPurify from 'dompurify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { baseRoute } from '../../../config';
 
 const TeacherHome = () => {
   const [notes, setNotes] = useState([]);
@@ -17,7 +18,7 @@ const TeacherHome = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await axios.get('http://localhost:3030/api/notes');
+        const res = await axios.get(`${baseRoute}/notes`);
         setNotes(res.data);
       } catch (error) {
         console.log(error);
@@ -28,14 +29,11 @@ const TeacherHome = () => {
 
   const handleDeleteNote = async () => {
     try {
-      const res = await axios.delete(
-        `http://localhost:3030/api/notes/${chapter.chapter}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+      const res = await axios.delete(`${baseRoute}/notes/${chapter.chapter}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      );
+      });
       console.log(res);
       navigate(0);
     } catch (error) {

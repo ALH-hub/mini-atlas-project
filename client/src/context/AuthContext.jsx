@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { baseRoute } from '../../config.js';
 
 const AuthContext = createContext({
   user: null,
@@ -22,7 +23,7 @@ const AuthProvider = ({ children }) => {
       if (storedToken) {
         try {
           const response = await axios.get(
-            `http://localhost:3030/api/auth/${storedRole}/me`,
+            `${baseRoute}/auth/${storedRole}/me`,
             {
               headers: { Authorization: `Bearer ${storedToken}` },
             },

@@ -1,6 +1,7 @@
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import { baseRoute } from '../../config';
 
 const Login = () => {
   const [role, setRole] = useState('student');
@@ -23,7 +24,7 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:3030/api/auth/${role}/login`,
+        `${baseRoute}/auth/${role}/login`,
         {
           email: user.email,
           password: user.password,

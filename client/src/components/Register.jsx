@@ -1,6 +1,7 @@
 // import background from '/background.png';
 import { useState } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { baseRoute } from '../../config';
 import axios from 'axios';
 
 const Register = () => {
@@ -19,15 +20,12 @@ const Register = () => {
   const handleSubmission = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:3030/api/auth/student/register',
-        {
-          name: user.name,
-          email: user.email,
-          password: user.password,
-          role: 'student',
-        },
-      );
+      const response = await axios.post(`${baseRoute}/auth/student/register`, {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        role: 'student',
+      });
       navigate('/login');
       console.log(response);
     } catch (error) {

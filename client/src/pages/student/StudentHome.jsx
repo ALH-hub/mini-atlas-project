@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
+import { baseRoute } from '../../../config.js';
 
 const StudentHome = () => {
   const [notes, setNotes] = useState([]);
@@ -12,7 +13,7 @@ const StudentHome = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await axios.get('http://localhost:3030/api/notes');
+        const res = await axios.get(`${baseRoute}/notes`);
         setNotes(res.data);
         console.log(res.data);
       } catch (error) {
