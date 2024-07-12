@@ -99,6 +99,15 @@ class DBClient {
     }
   }
 
+  async findStudents() {
+    try {
+      return await this.db.collection('students').find().toArray();
+    } catch (error) {
+      console.error('Error finding students:', error);
+      throw error;
+    }
+  }
+
   async insertStudent(stud) {
     try {
       return await this.db.collection('students').insertOne(stud);
@@ -144,11 +153,29 @@ class DBClient {
     }
   }
 
+  async findTeachers() {
+    try {
+      return await this.db.collection('teachers').find().toArray();
+    } catch (error) {
+      console.error('Error finding teachers:', error);
+      throw error;
+    }
+  }
+
   async findAdmin(user) {
     try {
       return await this.db.collection('admin').findOne(user);
     } catch (error) {
       console.error('Error finding admin:', error);
+      throw error;
+    }
+  }
+
+  async findAdmins() {
+    try {
+      return await this.db.collection('admin').find().toArray();
+    } catch (error) {
+      console.error('Error finding admins:', error);
       throw error;
     }
   }

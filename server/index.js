@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.js';
 import notesRoutes from './routes/notes.js';
+import userRoutes from './routes/users.js';
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', notesRoutes);
+app.use('/api/users', userRoutes);
 
 app.listen(3030, () => {
   console.log('connected on port 3030!!');
