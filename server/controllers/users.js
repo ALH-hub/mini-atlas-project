@@ -26,12 +26,23 @@ export const getUsers = async (req, res) => {
     const teachers = await dbClient.findTeachers();
     const admins = await dbClient.findAdmins();
 
-    // join all users
     const users = students.concat(teachers, admins);
     // remove all hashed passwords from user array
     users.forEach((user) => {
       delete user.password;
     });
+
+    // sort users by role
+    users.sort((a, b) => {
+      if (a.role < b.role) {
+        return -1;
+      }
+      if (a.role > b.role) {
+        return 1;
+      }
+      return 0;
+    });
+
     console.log(users);
     return res.status(200).json(users);
   } catch (error) {
