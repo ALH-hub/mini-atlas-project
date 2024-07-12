@@ -1,5 +1,5 @@
 const Unauthorized = () => {
-  return <div>erro you are not supposed to be here</div>;
+  return <div>Erorr get out rapidly from here</div>;
 };
 
 export default Unauthorized;

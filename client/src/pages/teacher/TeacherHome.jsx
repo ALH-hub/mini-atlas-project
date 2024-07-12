@@ -63,7 +63,7 @@ const TeacherHome = () => {
             <img className='w-5 ml-auto' src={add} alt='' />
           </Link>
         </div>
-        <ol className='list-decimal pl-4'>
+        <ol className='list-decimal px-2'>
           {notes.map((note) => (
             <button
               className='mb-[10px] cursor-pointer block'
@@ -75,7 +75,7 @@ const TeacherHome = () => {
           ))}
         </ol>
       </div>
-      <div className='px-4 pt-20 ml-[250px] flex-1 pb-4 text-justify '>
+      <div className='p-8 pt-20 ml-[250px] flex-1 pb-4 text-justify '>
         <h1 className='text-center font-bold text-xl mb-4 border-b border-b-gray-400'>
           {chapter?.title || 'Select a chapter to view content'}
         </h1>
