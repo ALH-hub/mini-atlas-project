@@ -44,7 +44,7 @@ const StudentHome = () => {
           {notes.map((note) => (
             <button
               className='mb-2 cursor-pointer block'
-              key={note.chapter}
+              key={note._id}
               onClick={() => setChapter(note)}
             >
               <li>{note.title}</li>
@@ -56,9 +56,12 @@ const StudentHome = () => {
         <h1 className='text-center font-bold text-xl mb-4 border-b border-b-gray-400'>
           {chapter?.title || 'Select a chapter to view content'}
         </h1>
-        <p className='leading-loose'>
-          {<div dangerouslySetInnerHTML={{ __html: formatContent }}></div>}
-        </p>
+        {
+          <div
+            className='leading-loose'
+            dangerouslySetInnerHTML={{ __html: formatContent }}
+          ></div>
+        }
       </div>
     </div>
   );
