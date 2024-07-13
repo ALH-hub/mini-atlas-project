@@ -9,7 +9,7 @@ const CreateUser = () => {
   const [user, setUser] = useState({
     name: '',
     email: '',
-    role: '',
+    role: 'student',
     password: '',
   });
 
@@ -41,6 +41,7 @@ const CreateUser = () => {
 
   return (
     <div className='pt-32 flex justify-center'>
+      {console.log(user)}
       <form
         className='flex flex-col gap-4 border p-8  border-gray-400 items-center h-full'
         action=''
@@ -92,6 +93,7 @@ const CreateUser = () => {
             type='text'
             name='role'
             id='role'
+            value='student'
             onChange={handleChange}
             required
           >
@@ -106,7 +108,7 @@ const CreateUser = () => {
             onClick={handleSubmit}
             type='submit'
           >
-            Update
+            Create
           </button>
           <button
             onClick={handleCancel}
