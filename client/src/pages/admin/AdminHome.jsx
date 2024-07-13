@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { baseRoute } from '../../../config.js';
 
@@ -25,7 +25,7 @@ const AdminHome = () => {
 
   const handleDelete = async (_id, role) => {
     try {
-      await axios.delete(`${baseRoute}/users/students/${role}/${_id}`, {
+      await axios.delete(`${baseRoute}/users/${role}/${_id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -60,9 +60,11 @@ const AdminHome = () => {
                 <td className='borders'>{user.email}</td>
                 <td className='borders'>{user.role}</td>
                 <td className='flex gap-4 borders justify-center'>
-                  <button className='pointer-cursor bg-blue-500 text-white p-1 rounded h-fit w-fit'>
-                    Edit
-                  </button>
+                  <Link to='/admin/update' state={user}>
+                    <button className='pointer-cursor bg-blue-500 text-white p-1 rounded h-fit w-fit'>
+                      Edit
+                    </button>
+                  </Link>
                   <button
                     onClick={() => {
                       handleDelete(user._id, user.role);
