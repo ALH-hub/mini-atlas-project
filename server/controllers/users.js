@@ -267,35 +267,30 @@ export const updateUser = async (req, res) => {
     if (uRole === 'student' && updatedUser.role === 'admin') {
       await dbClient.insertAdmin(updatedUser);
       await dbClient.deleteStudent(userToUpdate);
-      console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'student' && updatedUser.role === 'teacher') {
       await dbClient.insertTeacher(updatedUser);
       await dbClient.deleteStudent(userToUpdate);
-      console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'teacher' && updatedUser.role === 'admin') {
       await dbClient.insertAdmin(updatedUser);
       await dbClient.deleteTeacher(userToUpdate);
-      console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'teacher' && updatedUser.role === 'student') {
       await dbClient.insertStudent(updatedUser);
       await dbClient.deleteTeacher(userToUpdate);
-      console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'admin' && updatedUser.role === 'student') {
       await dbClient.insertStudent(updatedUser);
       await dbClient.deleteAdmin(userToUpdate);
-      console.log(result1, result2);
       return res.status(204).end();
     }
 
