@@ -10,6 +10,7 @@ import Write from './components/teacher/Write.jsx';
 import Unauthorized from './components/Unauthorized.jsx';
 import TeacherNav from './components/teacher/TeacherNav.jsx';
 import UpdateUser from './pages/admin/UpdateUser.jsx';
+import CreateUser from './pages/admin/CreateUser.jsx';
 
 const SLayout = () => {
   return (
@@ -53,6 +54,10 @@ const BrowserRouter = createBrowserRouter([
       {
         path: '/admin/update',
         element: <UpdateUser />,
+      },
+      {
+        path: '/admin/create',
+        element: <CreateUser />,
       },
     ],
   },

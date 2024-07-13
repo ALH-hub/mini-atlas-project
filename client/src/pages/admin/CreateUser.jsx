@@ -1,16 +1,15 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import { baseRoute } from '../../../config.js';
 import userImg from '/user.png';
 
-const UpdateUser = () => {
-  const state = useLocation().state;
+const CreateUser = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({
-    name: state.name || '',
-    email: state.email || '',
-    role: state.role || '',
+    name: '',
+    email: '',
+    role: '',
     password: '',
   });
 
@@ -21,11 +20,11 @@ const UpdateUser = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      if (user.password === '') {
+      if (user.password === '' || user.email === '' || user.name === '') {
         // do not submit form
         return;
       }
-      axios.put(`${baseRoute}/users/${state.role}/${state._id}`, user, {
+      axios.post(`${baseRoute}/users/`, user, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -37,12 +36,6 @@ const UpdateUser = () => {
   };
 
   const handleCancel = () => {
-    setUser({
-      name: '',
-      email: '',
-      role: '',
-      password: '',
-    });
     navigate('/admin');
   };
 
@@ -62,7 +55,6 @@ const UpdateUser = () => {
             type='text'
             name='name'
             id='name'
-            value={user.name}
             onChange={handleChange}
             required
           />
@@ -76,7 +68,6 @@ const UpdateUser = () => {
             type='email'
             name='email'
             id='email'
-            value={user.email}
             onChange={handleChange}
             required
           />
@@ -101,7 +92,6 @@ const UpdateUser = () => {
             type='text'
             name='role'
             id='role'
-            value={user.role}
             onChange={handleChange}
             required
           >
@@ -130,4 +120,4 @@ const UpdateUser = () => {
   );
 };
 
-export default UpdateUser;
+export default CreateUser;
