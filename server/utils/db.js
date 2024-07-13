@@ -34,11 +34,11 @@ class DBClient {
     return !!this.db;
   }
 
-  async findNote(chap) {
+  async insertNote(chap) {
     try {
-      return await this.db.collection('notes').findOne(chap);
+      return await this.db.collection('notes').insertOne(chap);
     } catch (error) {
-      console.error('Error finding note:', error);
+      console.error('Error inserting note:', error);
       throw error;
     }
   }
@@ -52,20 +52,11 @@ class DBClient {
     }
   }
 
-  async countNotes() {
+  async findNote(chap) {
     try {
-      return await this.db.collection('notes').countDocuments();
+      return await this.db.collection('notes').findOne(chap);
     } catch (error) {
-      console.error('Error counting notes:', error);
-      throw error;
-    }
-  }
-
-  async insertNote(chap) {
-    try {
-      return await this.db.collection('notes').insertOne(chap);
-    } catch (error) {
-      console.error('Error inserting note:', error);
+      console.error('Error finding note:', error);
       throw error;
     }
   }
@@ -90,11 +81,11 @@ class DBClient {
     }
   }
 
-  async findStudent(stud) {
+  async insertStudent(stud) {
     try {
-      return await this.db.collection('students').findOne(stud);
+      return await this.db.collection('students').insertOne(stud);
     } catch (error) {
-      console.error('Error finding student:', error);
+      console.error('Error inserting student:', error);
       throw error;
     }
   }
@@ -108,11 +99,22 @@ class DBClient {
     }
   }
 
-  async insertStudent(stud) {
+  async findStudent(stud) {
     try {
-      return await this.db.collection('students').insertOne(stud);
+      return await this.db.collection('students').findOne(stud);
     } catch (error) {
-      console.error('Error inserting student:', error);
+      console.error('Error finding student:', error);
+      throw error;
+    }
+  }
+
+  async updateStudent(filter, update) {
+    try {
+      return await this.db
+        .collection('students')
+        .updateOne(filter, { $set: update });
+    } catch (error) {
+      console.error('Error updating student:', error);
       throw error;
     }
   }
@@ -126,29 +128,11 @@ class DBClient {
     }
   }
 
-  async findTeacher(id) {
-    try {
-      return await this.db.collection('teachers').findOne(id);
-    } catch (error) {
-      console.error('Error finding teacher:', error);
-      throw error;
-    }
-  }
-
   async insertTeacher(user) {
     try {
       return await this.db.collection('teachers').insertOne(user);
     } catch (error) {
       console.error('Error inserting teacher:', error);
-      throw error;
-    }
-  }
-
-  async deleteTeacher(user) {
-    try {
-      return await this.db.collection('teachers').deleteOne(user);
-    } catch (error) {
-      console.error('Error deleting teacher:', error);
       throw error;
     }
   }
@@ -162,11 +146,40 @@ class DBClient {
     }
   }
 
-  async findAdmin(user) {
+  async findTeacher(id) {
     try {
-      return await this.db.collection('admin').findOne(user);
+      return await this.db.collection('teachers').findOne(id);
     } catch (error) {
-      console.error('Error finding admin:', error);
+      console.error('Error finding teacher:', error);
+      throw error;
+    }
+  }
+
+  async updateTeacher(filter, update) {
+    try {
+      return await this.db
+        .collection('teachers')
+        .updateOne(filter, { $set: update });
+    } catch (error) {
+      console.error('Error updating teacher:', error);
+      throw error;
+    }
+  }
+
+  async deleteTeacher(user) {
+    try {
+      return await this.db.collection('teachers').deleteOne(user);
+    } catch (error) {
+      console.error('Error deleting teacher:', error);
+      throw error;
+    }
+  }
+
+  async insertAdmin(user) {
+    try {
+      return await this.db.collection('admin').insertOne(user);
+    } catch (error) {
+      console.error('Error inserting admin:', error);
       throw error;
     }
   }
@@ -180,11 +193,22 @@ class DBClient {
     }
   }
 
-  async insertAdmin(user) {
+  async findAdmin(user) {
     try {
-      return await this.db.collection('admin').insertOne(user);
+      return await this.db.collection('admin').findOne(user);
     } catch (error) {
-      console.error('Error inserting admin:', error);
+      console.error('Error finding admin:', error);
+      throw error;
+    }
+  }
+
+  async updateAdmin(filter, update) {
+    try {
+      return await this.db
+        .collection('admin')
+        .updateOne(filter, { $set: update });
+    } catch (error) {
+      console.error('Error updating admin:', error);
       throw error;
     }
   }
@@ -214,7 +238,32 @@ class DBClient {
       throw error;
     }
   }
-  // ... (rest of your code for find/insert methods)
+
+  async updateUser(userToUpdate, updatedUser) {
+    try {
+      if (userToUpdate.role === 'student') {
+        return await this.updateStudent(userToUpdate, updatedUser);
+      }
+      if (userToUpdate.role === 'teacher') {
+        return await this.updateTeacher(userToUpdate, updatedUser);
+      }
+      if (userToUpdate.role === 'admin') {
+        return await this.updateAdmin(userToUpdate, updatedUser);
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw error;
+    }
+  }
+
+  async countNotes() {
+    try {
+      return await this.db.collection('notes').countDocuments();
+    } catch (error) {
+      console.error('Error counting notes:', error);
+      throw error;
+    }
+  }
 }
 
 const dbClient = new DBClient();

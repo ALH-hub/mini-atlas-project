@@ -2,6 +2,7 @@ import dbClient from '../utils/db.js';
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
@@ -110,6 +111,124 @@ export const deleteUser = async (req, res) => {
 
     const result = await dbClient.deleteUser(userToDel);
     return res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = authHeader.split(' ')[1];
+    let { id } = jwt.verify(token, sct); // Use let for id
+    if (!id) {
+      console.log('admin id: ', id);
+      return res.status(401).json({ message: 'Unauthorized jwt', id });
+    }
+
+    id = new ObjectId(id);
+    const user = await dbClient.findAdmin({
+      _id: id,
+    });
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized', user });
+    }
+
+    const uId = req.params.id;
+    const uRole = req.params.role;
+    console.log(` user to update: uId: ${uId}, uRole: ${uRole}`);
+    const sId = new ObjectId(uId);
+    let userToUpdate;
+
+    if (!uRole || !uId) {
+      return res.status(400).json({ message: 'Bad request' });
+    }
+
+    if (uRole === 'student') {
+      userToUpdate = await dbClient.findStudent({
+        _id: sId,
+      });
+    }
+
+    if (uRole === 'teacher') {
+      userToUpdate = await dbClient.findTeacher({
+        _id: sId,
+      });
+    }
+
+    if (uRole === 'admin') {
+      userToUpdate = await dbClient.findAdmin({
+        _id: sId,
+      });
+    }
+
+    if (!userToUpdate) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const { name, email, role, password } = req.body;
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    const updatedUser = {
+      name: name,
+      email: email,
+      role: role,
+      password: hash,
+    };
+
+    console.log(JSON.stringify(updatedUser, null, 2));
+
+    if (uRole === 'student' && updatedUser.role === 'admin') {
+      const result1 = await dbClient.insertAdmin(updatedUser);
+      const result2 = await dbClient.deleteStudent(userToUpdate);
+      console.log(result1, result2);
+      return res.status(204).end();
+    }
+
+    if (uRole === 'student' && updatedUser.role === 'teacher') {
+      const result1 = await dbClient.insertTeacher(updatedUser);
+      const result2 = await dbClient.deleteStudent(userToUpdate);
+      console.log(result1, result2);
+      return res.status(204).end();
+    }
+
+    if (uRole === 'teacher' && updatedUser.role === 'admin') {
+      const result1 = await dbClient.insertAdmin(updatedUser);
+      const result2 = await dbClient.deleteTeacher(userToUpdate);
+      console.log(result1, result2);
+      return res.status(204).end();
+    }
+
+    if (uRole === 'teacher' && updatedUser.role === 'student') {
+      const result1 = await dbClient.insertStudent(updatedUser);
+      const result2 = await dbClient.deleteTeacher(userToUpdate);
+      console.log(result1, result2);
+      return res.status(204).end();
+    }
+
+    if (uRole === 'admin' && updatedUser.role === 'student') {
+      const result1 = await dbClient.insertStudent(updatedUser);
+      const result2 = await dbClient.deleteAdmin(userToUpdate);
+      console.log(result1, result2);
+      return res.status(204).end();
+    }
+
+    if (uRole === 'admin' && updatedUser.role === 'teacher') {
+      const result1 = await dbClient.insertTeacher(updatedUser);
+      const result2 = await dbClient.deleteAdmin(userToUpdate);
+      console.log(result1, result2);
+      return res.status(204).end();
+    }
+
+    const result = await dbClient.updateUser(userToUpdate, updatedUser);
   } catch (error) {
     console.error(error);
     return res
