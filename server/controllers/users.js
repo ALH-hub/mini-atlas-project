@@ -40,10 +40,10 @@ export const getUsers = async (req, res) => {
 
     // sort users by role
     users.sort((a, b) => {
-      if (a.role < b.role) {
+      if (a.name < b.name) {
         return -1;
       }
-      if (a.role > b.role) {
+      if (a.name > b.name) {
         return 1;
       }
       return 0;
@@ -187,48 +187,47 @@ export const updateUser = async (req, res) => {
     console.log(JSON.stringify(updatedUser, null, 2));
 
     if (uRole === 'student' && updatedUser.role === 'admin') {
-      const result1 = await dbClient.insertAdmin(updatedUser);
-      const result2 = await dbClient.deleteStudent(userToUpdate);
+      await dbClient.insertAdmin(updatedUser);
+      await dbClient.deleteStudent(userToUpdate);
       console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'student' && updatedUser.role === 'teacher') {
-      const result1 = await dbClient.insertTeacher(updatedUser);
-      const result2 = await dbClient.deleteStudent(userToUpdate);
+      await dbClient.insertTeacher(updatedUser);
+      await dbClient.deleteStudent(userToUpdate);
       console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'teacher' && updatedUser.role === 'admin') {
-      const result1 = await dbClient.insertAdmin(updatedUser);
-      const result2 = await dbClient.deleteTeacher(userToUpdate);
+      await dbClient.insertAdmin(updatedUser);
+      await dbClient.deleteTeacher(userToUpdate);
       console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'teacher' && updatedUser.role === 'student') {
-      const result1 = await dbClient.insertStudent(updatedUser);
-      const result2 = await dbClient.deleteTeacher(userToUpdate);
+      await dbClient.insertStudent(updatedUser);
+      await dbClient.deleteTeacher(userToUpdate);
       console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'admin' && updatedUser.role === 'student') {
-      const result1 = await dbClient.insertStudent(updatedUser);
-      const result2 = await dbClient.deleteAdmin(userToUpdate);
+      await dbClient.insertStudent(updatedUser);
+      await dbClient.deleteAdmin(userToUpdate);
       console.log(result1, result2);
       return res.status(204).end();
     }
 
     if (uRole === 'admin' && updatedUser.role === 'teacher') {
-      const result1 = await dbClient.insertTeacher(updatedUser);
-      const result2 = await dbClient.deleteAdmin(userToUpdate);
-      console.log(result1, result2);
+      await dbClient.insertTeacher(updatedUser);
+      await dbClient.deleteAdmin(userToUpdate);
       return res.status(204).end();
     }
 
-    const result = await dbClient.updateUser(userToUpdate, updatedUser);
+    await dbClient.updateUser(userToUpdate, updatedUser);
   } catch (error) {
     console.error(error);
     return res
