@@ -41,7 +41,6 @@ const CreateUser = () => {
 
   return (
     <div className='pt-32 flex justify-center'>
-      {console.log(user)}
       <form
         className='flex flex-col gap-4 border p-8  border-gray-400 items-center h-full'
         action=''
