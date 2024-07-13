@@ -197,6 +197,23 @@ class DBClient {
       throw error;
     }
   }
+
+  async deleteUser(user) {
+    try {
+      if (user.role === 'student') {
+        return await this.db.collection('students').deleteOne(user);
+      }
+      if (user.role === 'teacher') {
+        return await this.db.collection('teachers').deleteOne(user);
+      }
+      if (user.role === 'admin') {
+        return await this.db.collection('admin').deleteOne(user);
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw error;
+    }
+  }
   // ... (rest of your code for find/insert methods)
 }
 
