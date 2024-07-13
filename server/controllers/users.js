@@ -119,6 +119,84 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+export const createUser = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = authHeader.split(' ')[1];
+    let { id } = jwt.verify(token, sct); // Use let for id
+    if (!id) {
+      return res.status(401).json({ message: 'Unauthorized jwt', id });
+    }
+
+    id = new ObjectId(id);
+    const user = await dbClient.findAdmin({
+      _id: id,
+    });
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized', user });
+    }
+
+    const { name, email, role, password } = req.body;
+
+    if (!name || !email || !role || !password) {
+      return res.status(400).json({ message: 'Bad request' });
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    const newUser = {
+      name: name,
+      email: email,
+      role: role,
+      password: hash,
+    };
+
+    if (role === 'student') {
+      // verify if student already exists
+      const student = await dbClient.findStudent({
+        email: email,
+      });
+      if (student) {
+        return res.status(400).json({ message: 'student already exist' });
+      }
+      await dbClient.insertStudent(newUser);
+    }
+
+    if (role === 'teacher') {
+      // verify if teacher already exists
+      const teacher = await dbClient.findTeacher({
+        email: email,
+      });
+      if (teacher) {
+        return res.status(400).json({ message: 'teacher already exist' });
+      }
+      await dbClient.insertTeacher(newUser);
+    }
+
+    if (role === 'admin') {
+      // verify if admin already exists
+      const admin = await dbClient.findAdmin({
+        email: email,
+      });
+      if (admin) {
+        return res.status(400).json({ message: 'admin already exist' });
+      }
+      await dbClient.insertAdmin(newUser);
+    }
+
+    return res.status(201).end();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: 'Server error', error: error.message });
+  }
+};
+
 export const updateUser = async (req, res) => {
   try {
     const authHeader = req.headers['authorization'];
