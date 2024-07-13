@@ -61,7 +61,7 @@ const AdminHome = () => {
                 <td className='borders'>{user.role}</td>
                 <td className='flex gap-4 borders justify-center'>
                   <Link to='/admin/update' state={user}>
-                    <button className='pointer-cursor bg-blue-500 text-white p-1 rounded h-fit w-fit'>
+                    <button className='pointer-cursor text-sm bg-blue-500 text-white p-1 rounded h-fit w-fit'>
                       Edit
                     </button>
                   </Link>
@@ -69,7 +69,7 @@ const AdminHome = () => {
                     onClick={() => {
                       handleDelete(user._id, user.role);
                     }}
-                    className='pointer-cursor bg-red-500 text-white p-1 rounded h-fit w-fit'
+                    className='pointer-cursor text-sm bg-red-500 text-white p-1 rounded h-fit w-fit'
                   >
                     Delete
                   </button>
@@ -77,6 +77,17 @@ const AdminHome = () => {
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <td className='borders text-right' colSpan='4'>
+                <Link to='/admin/create'>
+                  <button className='pointer-cursor text-sm bg-green-500 text-white p-1 mr-[8.6rem] rounded h-fit w-fit'>
+                    Create User
+                  </button>
+                </Link>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

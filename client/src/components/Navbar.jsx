@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className='flex items-center gap-4'>
         <img className='rounded-xl' src={user} alt='' width='40px' />
         <button
-          className='border border-lightgray-400 px-2 text-sm rounded h-fit hover:bg-blue-200'
+          className='border border-lightgray-400 p-1 text-sm rounded h-fit hover:bg-blue-200'
           onClick={handleLogout}
         >
           Logout
