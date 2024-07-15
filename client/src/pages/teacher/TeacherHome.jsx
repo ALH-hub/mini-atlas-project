@@ -7,6 +7,7 @@ import DOMPurify from 'dompurify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { baseRoute } from '../../../config';
+import Quiz from './Quiz';
 
 const TeacherHome = () => {
   const [notes, setNotes] = useState([]);
@@ -79,9 +80,12 @@ const TeacherHome = () => {
         <h1 className='text-center font-bold text-xl mb-4 border-b border-b-gray-400'>
           {chapter?.title || 'Select a chapter to view content'}
         </h1>
-        <p className='leading-loose'>
-          {<div dangerouslySetInnerHTML={{ __html: formatContent }}></div>}
-        </p>
+        {
+          <div
+            className='leading-loose'
+            dangerouslySetInnerHTML={{ __html: formatContent }}
+          ></div>
+        }
         {formatContent && (
           <div className='flex items-center justify-end gap-6 mt-4'>
             <Link className='w-[20px] rounded' to='/write?edit' state={chapter}>
@@ -92,6 +96,7 @@ const TeacherHome = () => {
             </button>
           </div>
         )}
+        <Quiz />
       </div>
     </div>
   );

@@ -23,14 +23,13 @@ const Login = () => {
   const hadleSubmission = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        `${baseRoute}/auth/${role}/login`,
-        {
-          email: user.email,
-          password: user.password,
-        },
-      );
+      const response = await axios.post(`${baseRoute}/auth/${role}/login`, {
+        email: user.email,
+        password: user.password,
+      });
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('name', response.data.name);
+      localStorage.setItem('email', response.data.email);
       localStorage.setItem('role', role);
       navigation(`/${role}`);
     } catch (error) {

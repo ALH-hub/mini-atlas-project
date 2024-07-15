@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .borders {
-  @apply border border-gray-300 p-1;
+  @apply border border-green-500 p-1;
 }

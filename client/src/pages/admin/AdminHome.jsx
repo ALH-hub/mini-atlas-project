@@ -56,7 +56,9 @@ const AdminHome = () => {
           <tbody>
             {users.map((user) => (
               <tr key={user._id}>
-                <td className='borders'>{user.name}</td>
+                <td className='borders'>
+                  <b>{user.name}</b>
+                </td>
                 <td className='borders'>{user.email}</td>
                 <td className='borders'>{user.role}</td>
                 <td className='flex gap-4 borders justify-center'>
@@ -79,9 +81,12 @@ const AdminHome = () => {
           </tbody>
           <tfoot>
             <tr>
-              <td className='borders text-right' colSpan='4'>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td className='borders text-center' colSpan='4'>
                 <Link to='/admin/create'>
-                  <button className='pointer-cursor text-sm bg-green-500 text-white p-1 mr-[8.6rem] rounded h-fit w-fit'>
+                  <button className='pointer-cursor text-sm bg-green-500 text-white p-1 rounded h-fit w-fit'>
                     Create User
                   </button>
                 </Link>
