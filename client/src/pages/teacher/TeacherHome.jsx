@@ -7,7 +7,6 @@ import DOMPurify from 'dompurify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { baseRoute } from '../../../config';
-import Quiz from './Quiz';
 
 const TeacherHome = () => {
   const [notes, setNotes] = useState([]);
@@ -96,7 +95,6 @@ const TeacherHome = () => {
             </button>
           </div>
         )}
-        <Quiz />
       </div>
     </div>
   );

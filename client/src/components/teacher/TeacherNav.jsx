@@ -18,6 +18,8 @@ const TeacherNav = () => {
         <img className='rounded-xl' width='40px' src={logo} alt='' />
       </Link>
       <div className='flex items-center gap-4'>
+        <Link>Home</Link>
+        <Link to='/teacher/quiz/upload'>Quiz</Link>
         <img className='rounded-xl' src={user} alt='' width='40px' />
         <button
           className='border border-lightgray-400 px-2 text-sm rounded h-fit hover:bg-blue-200'
