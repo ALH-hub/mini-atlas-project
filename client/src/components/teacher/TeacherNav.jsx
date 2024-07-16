@@ -17,16 +17,20 @@ const TeacherNav = () => {
       <Link to={`/${role}`}>
         <img className='rounded-xl' width='40px' src={logo} alt='' />
       </Link>
-      <div className='flex items-center gap-4'>
-        <Link>Home</Link>
-        <Link to='/teacher/quiz/upload'>Quiz</Link>
-        <img className='rounded-xl' src={user} alt='' width='40px' />
-        <button
-          className='border border-lightgray-400 px-2 text-sm rounded h-fit hover:bg-blue-200'
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
+      <div className='flex items-center gap-12'>
+        <div className='flex gap-8 items-center'>
+          <Link>Home</Link>
+          <Link to='/teacher/quiz'>Quiz</Link>
+        </div>
+        <div className='flex gap-4 items-center'>
+          <img className='rounded-xl' src={user} alt='' width='40px' />
+          <button
+            className='border border-lightgray-400 px-2 text-sm rounded h-fit hover:bg-blue-200'
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </nav>
   );

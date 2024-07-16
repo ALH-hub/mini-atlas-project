@@ -67,7 +67,7 @@ const TeacherHome = () => {
           {notes.map((note) => (
             <button
               className='mb-[10px] cursor-pointer block'
-              key={note.chapter}
+              key={note._id}
               onClick={() => setChapter(note)}
             >
               <li>{note.title}</li>

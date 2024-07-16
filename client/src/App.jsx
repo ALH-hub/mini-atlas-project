@@ -12,6 +12,7 @@ import TeacherNav from './components/teacher/TeacherNav.jsx';
 import UpdateUser from './pages/admin/UpdateUser.jsx';
 import CreateUser from './pages/admin/CreateUser.jsx';
 import Quiz from './pages/teacher/Quiz.jsx';
+import QuizUpload from './pages/teacher/QuizUpload.jsx';
 
 const SLayout = () => {
   return (
@@ -72,8 +73,12 @@ const BrowserRouter = createBrowserRouter([
         element: <TeacherHome />,
       },
       {
-        path: '/teacher/quiz/upload',
+        path: '/teacher/quiz',
         element: <Quiz />,
+      },
+      {
+        path: '/teacher/quiz/new',
+        element: <QuizUpload />,
       },
     ],
   },

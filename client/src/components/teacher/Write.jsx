@@ -55,7 +55,6 @@ const Write = () => {
   if (!storedRole) {
     return <Navigate to='/login' />;
   }
-  console.log(storedRole);
   if (storedRole !== 'teacher' && storedRole !== 'admin') {
     return <Navigate to='/unauthorized' />;
   }
