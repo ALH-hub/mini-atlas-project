@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import trash from '/trash.svg';
 import add from '/add.svg';
 import edit from '/edit.svg';
@@ -8,105 +8,36 @@ import axios from 'axios';
 
 const Question = () => {
   const [body, setBody] = useState({});
+  const [quiz, setQuiz] = useState([]);
+  const navigate = useNavigate();
 
-  const questions = [
-    {
-      chapter: 'chapter 1',
-      question1: {
-        title: 'This is the first question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(`${baseRoute}/quiz/${body._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      },
-      question2: {
-        title: 'This is the second question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question3: {
-        title: 'This is the third question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question4: {
-        title: 'This is the fourth question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question5: {
-        title: 'This is the fifth question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-    },
-    {
-      chapter: 'chapter 2',
-      question1: {
-        title: 'This is the first section 2 question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question2: {
-        title: 'This is the second question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question3: {
-        title: 'This is the third question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question4: {
-        title: 'This is the fourth question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-      question5: {
-        title: 'This is the fifth question',
-        options: {
-          A: 'Prop1',
-          B: 'Prop2',
-          C: 'Prop3',
-          D: 'Prop4',
-        },
-      },
-    },
-  ];
+      });
+      console.log(res);
+      navigate(0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchQuiz = async () => {
+      try {
+        const resp = await axios.get(`${baseRoute}/quiz`);
+        setQuiz(resp.data);
+        console.log(resp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchQuiz();
+  }, []);
 
   return (
     <div className='flex'>
@@ -119,19 +50,17 @@ const Question = () => {
             <img className='w-5 ml-auto' src={add} alt='' />
           </Link>
         </div>
-        <ol className='list-decimal px-2'>
-          {questions.map((chapterObj, chapterIndex) => (
-            <div key={chapterIndex}>
-              <li>
-                <button
-                  onClick={() => {
-                    setBody(chapterObj);
-                  }}
-                >
-                  {chapterObj.chapter}
-                </button>
-              </li>
-            </div>
+        <ol className='list-decimal px-2 flex gap-2 flex-col'>
+          {quiz.map((chapterObj, chapterIndex) => (
+            <li key={chapterIndex} className='px-2'>
+              <button
+                onClick={() => {
+                  setBody(chapterObj);
+                }}
+              >
+                {chapterObj.chapter}
+              </button>
+            </li>
           ))}
         </ol>
       </div>
@@ -141,39 +70,39 @@ const Question = () => {
         </h1>
 
         <div className=''>
-          {Object.entries(body)
-            .filter(([key]) => key.startsWith('question'))
-            .map(([questionKey, questionData], questionIndex) => (
-              <div key={questionKey} className='flex flex-col gap-2'>
-                <h3>{questionData.title}</h3>
-                <form className='flex flex-col gap-2 mb-8'>
-                  {Object.entries(questionData.options).map(
-                    ([optionKey, optionValue]) => (
-                      <div key={optionKey} className='flex gap-4'>
-                        <input
-                          type='radio'
-                          id={`${questionIndex}-${optionKey}`}
-                          name='option'
-                          value={optionKey}
-                        />
-                        <label htmlFor={`${questionIndex}-${optionKey}`}>
-                          {optionValue}
-                        </label>
-                      </div>
-                    ),
-                  )}
-                </form>
-              </div>
-            ))}
-        </div>
-
-        <div className='flex items-center justify-end gap-6 mt-4'>
-          <Link className='w-[20px] rounded'>
-            <img className='w-fit rounded' src={edit} alt='' />
-          </Link>
-          <button className='w-[17px] rounded'>
-            <img className='w-fit rounded' src={trash} alt='' />
-          </button>
+          <ol className='list-decimal'>
+            {Object.entries(body)
+              .filter(([key]) => key.startsWith('question'))
+              .map(([questionKey, questionData], questionIndex) => (
+                <div key={questionKey} className='flex flex-col gap-2'>
+                  <li>
+                    <h3>{questionData.title}</h3>
+                  </li>
+                  <form className='flex flex-col gap-2 mb-8'>
+                    {Object.entries(questionData.options).map(
+                      ([optionKey, optionValue]) => (
+                        <div key={optionKey} className='flex gap-4'>
+                          <input
+                            type='radio'
+                            id={`${questionIndex}-${optionKey}`}
+                            name='option'
+                            value={optionKey}
+                          />
+                          <label htmlFor={`${questionIndex}-${optionKey}`}>
+                            {optionValue}
+                          </label>
+                        </div>
+                      ),
+                    )}
+                  </form>
+                </div>
+              ))}
+            <div className='flex items-center justify-end gap-6 mt-4'>
+              <button onClick={handleDelete} className='w-[17px] rounded'>
+                <img className='w-fit rounded' src={trash} alt='' />
+              </button>
+            </div>
+          </ol>
         </div>
       </div>
     </div>

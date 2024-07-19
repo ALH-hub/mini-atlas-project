@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { baseRoute } from '../../../config.js';
 
 const QuestionForm = () => {
   const navigate = useNavigate();
@@ -43,6 +45,19 @@ const QuestionForm = () => {
       ...currentQuestion,
       options: { ...currentQuestion.options, [option]: value },
     });
+  };
+
+  const handleSubmission = async () => {
+    try {
+      await axios.post(`${baseRoute}/quiz`, questions, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      navigate('/teacher/quiz');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCancel = () => {
@@ -101,7 +116,10 @@ const QuestionForm = () => {
               Add Question
             </button>
           </div>
-          <button className='bg-blue-200 p-2 mt-4 rounded text-center border border-blue-200 hover:bg-white'>
+          <button
+            onClick={handleSubmission}
+            className='bg-blue-200 p-2 mt-4 rounded text-center border border-blue-200 hover:bg-white'
+          >
             Submit
           </button>
           <button
@@ -111,8 +129,8 @@ const QuestionForm = () => {
             Cancel
           </button>
         </div>
-        {/* <h2>Current Questions:</h2>
-        <pre>{JSON.stringify(questions, null, 2)}</pre> */}
+        <h2>Current Questions:</h2>
+        <pre>{JSON.stringify(questions, null, 2)}</pre>
       </div>
     </div>
   );
