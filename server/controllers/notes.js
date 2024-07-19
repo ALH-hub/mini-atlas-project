@@ -27,7 +27,7 @@ export const createNote = async (req, res) => {
     const token = authHeader.split(' ')[1];
     let { id } = jwt.verify(token, sct); // Use let for id
     if (!id) {
-      return res.status(401).json({ message: 'Unauthorized', id });
+      return res.status(403).json({ message: 'Forbidden', id });
     }
 
     id = new ObjectId(id);
@@ -35,7 +35,7 @@ export const createNote = async (req, res) => {
       _id: id,
     });
     if (!user) {
-      return res.status(401).json({ message: 'Unauthorized', user });
+      return res.status(403).json({ message: 'Forbidden', user });
     }
 
     const note = req.body;

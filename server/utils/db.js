@@ -264,6 +264,33 @@ class DBClient {
       throw error;
     }
   }
+
+  async getQuizes() {
+    try {
+      return await this.db.collection('quizes').find().toArray();
+    } catch (error) {
+      console.error('Error getting all quizes:', error);
+      throw error;
+    }
+  }
+
+  async insertQuiz(quiz) {
+    try {
+      return await this.db.collection('quizes').insertOne(quiz);
+    } catch (error) {
+      console.error('Error inserting quiz:', error);
+      throw error;
+    }
+  }
+
+  async deleteQuiz(quiz) {
+    try {
+      return await this.db.collection('quizes').deleteOne(quiz);
+    } catch (error) {
+      console.error('Error deleting quiz:', error);
+      throw error;
+    }
+  }
 }
 
 const dbClient = new DBClient();
